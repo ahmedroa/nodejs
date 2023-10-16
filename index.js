@@ -6,13 +6,12 @@ const mongoose = require('mongoose');
 
 const Article = require('./Models/Article');
 
-
-mongoose.connect('mongodb+srv://devahmed10:vAdffJZIvVWve7d9@cluster0.sj8ckm2.mongodb.net/?retryWrites=true&w=majority').then(() =>{
+let kay = '';
+mongoose.connect(kay).then(() =>{
    console.log('Connected Successfully')
 }).catch(() =>{
    console.log('error  with connecting with the DB')
 })
-// mongodb+srv://aahmedkro:<password>@cluster0.xmxwadh.mongodb.net/?retryWrites=true&w=majority
 app.use(express.json());
 
 app.get('/' , (req, res)=> {
@@ -24,7 +23,7 @@ app.get('/numbers' , (req, res)=> {
    for (let i = 0; i <= 100; i++){
       numbers += i + ' - ';
    }
-   // res.sendFile(__dirname + '/pages/numbers.html')
+//    res.sendFile(__dirname + '/pages/numbers.html')
 // res.send(__dirname + '/pages/numbers.html')
 res.render('numbers.ejs')
 
