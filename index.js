@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 
 const Article = require('./Models/Article');
 
-let kay = '';
+let kay = 'mongodb://devahmed10:@ac-4atmgb1-shard-00-00.sj8ckm2.mongodb.net:27017,ac-4atmgb1-shard-00-01.sj8ckm2.mongodb.net:27017,ac-4atmgb1-shard-00-02.sj8ckm2.mongodb.net:27017/?ssl=true&replicaSet=atlas-tln9wv-shard-0&authSource=admin&retryWrites=true&w=majority';
 mongoose.connect(kay).then(() =>{
    console.log('Connected Successfully')
 }).catch((error) =>{
