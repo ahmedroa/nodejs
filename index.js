@@ -6,67 +6,132 @@ const mongoose = require('mongoose');
 
 const Article = require('./Models/Article');
 
-let kay = '';
+// let kay = 'mongodb+srv?://devahmed10:aqcu1w9N9LgwOhTU@cluster0.sj8ckm2.mongodb.net/?retryWrites=true&w=majority';
+let kay = 'mongodb://devahmed10:aqcu1w9N9LgwOhTU@ac-4atmgb1-shard-00-00.sj8ckm2.mongodb.net:27017,ac-4atmgb1-shard-00-01.sj8ckm2.mongodb.net:27017,ac-4atmgb1-shard-00-02.sj8ckm2.mongodb.net:27017/?ssl=true&replicaSet=atlas-tln9wv-shard-0&authSource=admin&retryWrites=true&w=majority';
 mongoose.connect(kay).then(() =>{
    console.log('Connected Successfully')
-}).catch(() =>{
-   console.log('error  with connecting with the DB')
+}).catch((error) =>{
+   console.log('error with connecting with the DB')
+   console.log(error)
 })
 app.use(express.json());
 
-app.get('/' , (req, res)=> {
 
-res.send('Hello')
-})
-app.get('/numbers' , (req, res)=> {
-   let numbers = '';
-   for (let i = 0; i <= 100; i++){
-      numbers += i + ' - ';
-   }
-//    res.sendFile(__dirname + '/pages/numbers.html')
-// res.send(__dirname + '/pages/numbers.html')
-res.render('numbers.ejs')
 
-console.log(numbers)
-})
-app.get('/fbressd' , (req, res)=> {
-res.send('Hello')
-})
-app.get('/findSum/:number1/:number2' , (req, res)=> {
-   const num1 = req.params.number1;
-   const num2 = req.params.number2;
-   console.log(req.params)
-res.send('thr numbers are: ${mum1} / ${mum2}')
-})
+app.get("/hello", (req, res) => {
+	res.send("hello");
+});
 
-app.get('/hbvgcvffi' , (req, res)=> {
-res.send('hfdsi')
-})
- app.post('/commit', (req,res) => {
-    res.send('Post request on add commit')
- })
- app.post('/Article', async (req,res) => {
-   const newArticle = new Article()
-   const artTitle = req.body.ArticleTitle
-   const artBody  = req.body.ArticleBody
-   // res.send(artTitle + " " + artBody);
-   // return ;
- 
-   newArticle.titl = artTitle
-   newArticle.body = artBody
-   newArticle.numberOfLikes = 100
-  await newArticle.save()
-    res.send('Post request on add commit')
- })
- app.delete('/delete', (req,res) => {
-    res.send('Post request on add commit')
- })
+app.get("/", (req, res) => {
+	res.send("hello in node js project");
+});
 
-app.get("/Articles", async (req, res) =>{
- const articles = await Article.find(); 
- console.log('the Article Are : ', articles );
- res.json(articles);
-} );
-app.listen(3000, ()=> { 
-    console.log('Hello word')
-})
+app.get("/numbers", (req, res) => {
+	let numbers = "";
+	for (let i = 0; i <= 100; i++) {
+		numbers += i + " - ";
+	}
+	// res.send(`the numbers are: ${numbers}`);
+
+	// res.send(__dirname + "/views/numbers.html");
+	// res.sendFile(__dirname + "/views/numbers.html");
+	res.render("numbers.ejs", {
+		name: "Ahmad",
+		numbers: numbers,
+	});
+});
+
+app.get("/findSummation/:number1/:number2", (req, res) => {
+	const num1 = req.params.number1;
+	const num2 = req.params.number2;
+
+	const total = Number(num1) + Number(num2);
+
+	res.send(`the total is ${total}`);
+});
+
+app.get("/sayHello", (req, res) => {
+	// console.log(req.body);
+
+	// console.log(req.query);
+	// res.send(`Hello ${req.body.name}, Age is: ${req.query.age}`);
+
+	res.json({
+		name: req.body.name,
+		age: req.query.age,
+		language: "Arabic",
+	});
+});
+
+app.put("/test", (req, res) => {
+	res.send("hello world");
+});
+
+app.post("/addComment", (req, res) => {
+	res.send("post request on add comment");
+});
+
+app.delete("/testingDelete", (req, res) => {
+	res.send("delete request");
+});
+
+// ======= ARTICLES ENDPOINTS =====
+app.post("/articles", async (req, res) => {
+	const newArticle = new Article();
+
+	const artTitle = req.body.articleTitle;
+	const artBody = req.body.articleBody;
+
+	newArticle.title = artTitle;
+	newArticle.body = artBody;
+	newArticle.numberOfLikes = 0;
+	await newArticle.save();
+
+	res.json(newArticle);
+});
+
+
+app.get("/articles", async (req, res) => {
+	const articles = await Article.find();
+	
+	console.log("the articles are", articles);
+
+	res.json(articles);
+});
+
+app.get("/articles/:articleId", async (req, res) => {
+	const id = req.params.articleId;
+
+	try {
+		const article = await Article.findById(id);
+		res.json(article);
+		return;
+	} catch (error) {
+		console.log("error while reading article of id ", id);
+		return res.send("error");
+	}
+});
+
+app.delete("/articles/:articleId", async (req, res) => {
+	const id = req.params.articleId;
+
+	try {
+		const article = await Article.findByIdAndDelete(id);
+		res.json(article);
+		return;
+	} catch (error) {
+		console.log("error while reading article of id ", id);
+		return res.json(error);
+	}
+});
+
+app.get("/showArticles", async (req, res) => {
+	const articles = await Article.find();
+
+	res.render("articles.ejs", {
+		allArticles: articles,
+	});
+});
+app.listen(3000, () => {
+	console.log("I am listening in port 3000");
+});
