@@ -6,8 +6,7 @@ const mongoose = require('mongoose');
 
 const Article = require('./Models/Article');
 
-// let kay = 'mongodb+srv?://devahmed10:aqcu1w9N9LgwOhTU@cluster0.sj8ckm2.mongodb.net/?retryWrites=true&w=majority';
-let kay = 'mongodb://devahmed10:aqcu1w9N9LgwOhTU@ac-4atmgb1-shard-00-00.sj8ckm2.mongodb.net:27017,ac-4atmgb1-shard-00-01.sj8ckm2.mongodb.net:27017,ac-4atmgb1-shard-00-02.sj8ckm2.mongodb.net:27017/?ssl=true&replicaSet=atlas-tln9wv-shard-0&authSource=admin&retryWrites=true&w=majority';
+let kay = '';
 mongoose.connect(kay).then(() =>{
    console.log('Connected Successfully')
 }).catch((error) =>{
